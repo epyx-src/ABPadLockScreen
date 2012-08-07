@@ -28,23 +28,28 @@
 //  3. This notice may not be removed or altered from any source distribution.
 //
 #import "ABPadLockScreen.h"
-@interface ABPadLockScreen()
-@property (nonatomic, retain) UIImageView *keyValueOneImageView;
-@property (nonatomic, retain) UIImageView *keyValueTwoImageView;
-@property (nonatomic, retain) UIImageView *keyValueThreeImageView;
-@property (nonatomic, retain) UIImageView *keyValueFourImageView;
-@property (nonatomic, retain) UIImageView *incorrectAttemptImageView;
 
-@property (nonatomic, retain) UILabel *incorrectAttemptLabel;
-@property (nonatomic, retain) UILabel *subTitleLabel;
+#define KEY_VALUE_WIDTH 16
+#define KEY_VALUE_MARGIN 25
+
+@interface ABPadLockScreen()
+
+@property (nonatomic, strong) UIImageView *incorrectAttemptImageView;
+
+@property (nonatomic, strong) UILabel *incorrectAttemptLabel;
+@property (nonatomic, strong) UILabel *subTitleLabel;
+
+@property (nonatomic, strong) UILabel *pinCodeLabel;
 
 @property (nonatomic) int digitsPressed;
 @property(nonatomic) int attempts;
 
-@property (nonatomic, retain) NSString *digitOne;
-@property (nonatomic, retain) NSString *digitTwo;
-@property (nonatomic, retain) NSString *digitThree;
-@property (nonatomic, retain) NSString *digitFour;
+@property (nonatomic, strong) NSString *digitOne;
+@property (nonatomic, strong) NSString *digitTwo;
+@property (nonatomic, strong) NSString *digitThree;
+@property (nonatomic, strong) NSString *digitFour;
+@property (nonatomic, strong) NSString *digitFive;
+@property (nonatomic, strong) NSString *digitSix;
 
 - (void)cancelButtonTapped:(id)sender;
 - (void)digitButtonPressed:(id)sender;
@@ -53,13 +58,15 @@
 - (void)checkPin;
 - (void)lockPad;
 - (UIButton *)getStyledButtonForNumber:(int)number;
+
 @end
 
 @implementation ABPadLockScreen
 @synthesize delegate, dataSource;
-@synthesize keyValueOneImageView, keyValueTwoImageView, keyValueThreeImageView, keyValueFourImageView, incorrectAttemptImageView;
+@synthesize pinCodeLabel;
+@synthesize incorrectAttemptImageView;
 @synthesize incorrectAttemptLabel, subTitleLabel;
-@synthesize digitOne, digitTwo, digitThree, digitFour;
+@synthesize digitOne, digitTwo, digitThree, digitFour, digitFive, digitSix;
 @synthesize digitsPressed, attempts;
 
 - (id)initWithDelegate:(id<ABPadLockScreenDelegate>)aDelegate withDataSource:(id<ABPadLockScreenDataSource>)aDataSource
@@ -88,11 +95,11 @@
     [super viewDidLoad];
     [self.view setFrame:CGRectMake(0.0f, 0.0f, 332.0f, 465.0f)];//size of unlock pad
     [self.view setBackgroundColor:[UIColor clearColor]];
-    
+
     //Set the background view
-    UIImageView *backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"background"]] autorelease];
+    UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"background"]];
     [self.view addSubview:backgroundView];
-    
+
     //Set the title
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 10.0f, self.view.frame.size.width - 40.0f, 20.0f)];
     [titleLabel setTextAlignment:UITextAlignmentCenter];
@@ -119,40 +126,22 @@
     [_subtitleLabel setText:[dataSource padLockScreenSubtitleText]];
     [self setSubTitleLabel:_subtitleLabel];
     [self.view addSubview:subTitleLabel];
-    
-    //Set the (currently empty) key value images (dots that appear when the user presses a button)
-    UIImageView *_keyValueImageOne = [[[UIImageView alloc] initWithFrame:CGRectMake(52.0f, 133.0f, 16.0f, 16.0f)] autorelease];
-    [self setKeyValueOneImageView:_keyValueImageOne];
-    [self.view addSubview:keyValueOneImageView];
-    
-    UIImageView *_keyValueImageTwo = [[[UIImageView alloc] initWithFrame:CGRectMake(123.0f, keyValueOneImageView.frame.origin.y, 16.0f, 16.0f)] autorelease];
-    [self setKeyValueTwoImageView:_keyValueImageTwo];
-    [self.view addSubview:keyValueTwoImageView];
-    
-    UIImageView *_keyValueImageThree = [[[UIImageView alloc] initWithFrame:CGRectMake(194.0f, 
-                                                                                     keyValueOneImageView.frame.origin.y, 
-                                                                                     16.0f, 
-                                                                                     16.0f)] autorelease];
-    [self setKeyValueThreeImageView:_keyValueImageThree];
-    [self.view addSubview:keyValueThreeImageView];
-    
-    UIImageView *_keyValueImageFour = [[[UIImageView alloc] initWithFrame:CGRectMake(265.0f, 
-                                                                                    keyValueOneImageView.frame.origin.y, 
-                                                                                    16.0f, 
-                                                                                    16.0f)] autorelease];
-    [self setKeyValueFourImageView:_keyValueImageFour];
-    [self.view addSubview:keyValueFourImageView];
-    
+
+    //Set the label showing the pin code
+    self.pinCodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(80.0f, 123.0f, 250.0f, 40.0f)];
+    self.pinCodeLabel.backgroundColor = [UIColor clearColor];
+    self.pinCodeLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:42.0f];
+    [self.view addSubview:self.pinCodeLabel];
+
     //Set the incorrect attempt error background image and label
     UIImageView *_incorrectAttemptImageView = [[UIImageView alloc] initWithFrame:CGRectMake(60.0f, 190.0f, 216.0f, 20.0f)];
     [self setIncorrectAttemptImageView:_incorrectAttemptImageView];
     [self.view addSubview:incorrectAttemptImageView];
-    [_incorrectAttemptImageView release];
     
-    UILabel *_incorrectAttemptLabel = [[[UILabel alloc] initWithFrame:CGRectMake(incorrectAttemptImageView.frame.origin.x + 10.0f, 
+    UILabel *_incorrectAttemptLabel = [[UILabel alloc] initWithFrame:CGRectMake(incorrectAttemptImageView.frame.origin.x + 10.0f, 
                                                                                 incorrectAttemptImageView.frame.origin.y + 1.0f, 
                                                                                 incorrectAttemptImageView.frame.size.width - 20.0f, 
-                                                                                incorrectAttemptImageView.frame.size.height - 2.0f)] autorelease];
+                                                                                incorrectAttemptImageView.frame.size.height - 2.0f)];
     [_incorrectAttemptLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:12.0f]];
     [_incorrectAttemptLabel setTextAlignment:UITextAlignmentCenter];
     [_incorrectAttemptLabel setTextColor:[UIColor whiteColor]];
@@ -226,19 +215,20 @@
                                     rightButtonWidth, 
                                     buttonHeight)];
     [self.view addSubview:nineButton];
-    
-    UIButton *blankButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [blankButton setBackgroundImage:[UIImage imageNamed:@"blank"] forState:UIControlStateNormal];
-    [blankButton setBackgroundImage:[UIImage imageNamed:@"blank"] forState:UIControlStateHighlighted];
-    [blankButton setFrame:CGRectMake(sevenButton.frame.origin.x, 
+
+    UIButton *enterButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [enterButton setBackgroundImage:[UIImage imageNamed:@"blank"] forState:UIControlStateNormal];
+    [enterButton setBackgroundImage:[UIImage imageNamed:@"blank-selected"] forState:UIControlStateHighlighted];
+    [enterButton addTarget:self action:@selector(enterButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [enterButton setFrame:CGRectMake(sevenButton.frame.origin.x,
                                      sevenButton.frame.origin.y + sevenButton.frame.size.height - 1, 
                                      leftButtonWidth, 
                                      buttonHeight)];
-    [self.view addSubview:blankButton];
-    
+    [self.view addSubview:enterButton];
+
     UIButton *zeroButton = [self getStyledButtonForNumber:0];
     [zeroButton setFrame:CGRectMake(twoButton.frame.origin.x, 
-                                    blankButton.frame.origin.y, 
+                                    enterButton.frame.origin.y, 
                                     middleButtonWidth, 
                                     buttonHeight)];
     [self.view addSubview:zeroButton];
@@ -252,10 +242,6 @@
                                      rightButtonWidth, 
                                      buttonHeight)];
     [self.view addSubview:clearButton];
-    
-    [titleLabel release];
-    [_subtitleLabel release];
-    
 }
 
 - (void)viewDidUnload
@@ -276,16 +262,15 @@
 - (void)resetLockScreen
 {
     [self setDigitsPressed:0];
-    
-    [keyValueOneImageView setImage:nil];
-    [keyValueTwoImageView setImage:nil];
-    [keyValueThreeImageView setImage:nil];
-    [keyValueFourImageView setImage:nil];
+
+    self.pinCodeLabel.text = @"";
     
     [self setDigitOne:nil];
     [self setDigitTwo:nil];
     [self setDigitThree:nil];
     [self setDigitFour:nil];
+    [self setDigitFive:nil];
+    [self setDigitSix:nil];
 }
 
 - (void)resetAttempts
@@ -302,6 +287,10 @@
     [incorrectAttemptLabel setText:nil];
     
 }
+- (void)enterButtonTapped:(id)sender
+{
+    [self performSelector:@selector(checkPin) withObject:self afterDelay:0.3];
+}
 
 - (void)backSpaceButtonTapped:(id)sender
 {
@@ -312,22 +301,34 @@
             
         case 1:
             digitsPressed = 0;
-            [keyValueOneImageView setImage:nil];
             [self setDigitOne:nil];
+            self.pinCodeLabel.text = @"";
             break;
             
         case 2:
             digitsPressed = 1;
-            [keyValueTwoImageView setImage:nil];
             [self setDigitTwo:nil];
+            self.pinCodeLabel.text = [self.pinCodeLabel.text substringWithRange:NSMakeRange(0, 1)];
             break;
             
         case 3:
             digitsPressed = 2;
-            [keyValueThreeImageView setImage:nil];
             [self setDigitThree:nil];
+            self.pinCodeLabel.text = [self.pinCodeLabel.text substringWithRange:NSMakeRange(0, 2)];
             break;
             
+        case 4:
+            digitsPressed = 3;
+            [self setDigitFour:nil];
+            self.pinCodeLabel.text = [self.pinCodeLabel.text substringWithRange:NSMakeRange(0, 3)];
+            break;
+
+        case 5:
+            digitsPressed = 4;
+            [self setDigitFive:nil];
+            self.pinCodeLabel.text = [self.pinCodeLabel.text substringWithRange:NSMakeRange(0, 4)];
+            break;
+
         default:
             break;
     }
@@ -347,30 +348,40 @@
     {
         case 0:
             digitsPressed = 1;
-            [keyValueOneImageView setImage:[UIImage imageNamed:@"input"]];
             [self setDigitOne:[NSString stringWithFormat:@"%i", digit]];
+            self.pinCodeLabel.text = self.digitOne;
             break;
             
         case 1:
             digitsPressed = 2;
-            [keyValueTwoImageView setImage:[UIImage imageNamed:@"input"]];
             [self setDigitTwo:[NSString stringWithFormat:@"%i", digit]];
+            self.pinCodeLabel.text = [self.pinCodeLabel.text stringByAppendingFormat:@"%i", digit];
             break;
             
         case 2:
             digitsPressed = 3;
-            [keyValueThreeImageView setImage:[UIImage imageNamed:@"input"]];
             [self setDigitThree:[NSString stringWithFormat:@"%i", digit]];
+            self.pinCodeLabel.text = [self.pinCodeLabel.text stringByAppendingFormat:@"%i", digit];
             break;
             
         case 3:
             digitsPressed = 4;
-            [keyValueFourImageView setImage:[UIImage imageNamed:@"input"]];
             [self setDigitFour:[NSString stringWithFormat:@"%i", digit]];
-            [self performSelector:@selector(checkPin) withObject:self afterDelay:0.3];
-            
+            self.pinCodeLabel.text = [self.pinCodeLabel.text stringByAppendingFormat:@"%i", digit];
             break;
             
+        case 4:
+            digitsPressed = 5;
+            [self setDigitFive:[NSString stringWithFormat:@"%i", digit]];
+            self.pinCodeLabel.text = [self.pinCodeLabel.text stringByAppendingFormat:@"%i", digit];
+            break;
+
+        case 5:
+            digitsPressed = 6;
+            [self setDigitSix:[NSString stringWithFormat:@"%i", digit]];
+            self.pinCodeLabel.text = [self.pinCodeLabel.text stringByAppendingFormat:@"%i", digit];
+            break;
+
         default:
             break;
     }
@@ -378,7 +389,7 @@
 
 - (void)checkPin
 {
-    int stringPasscode = [[NSString stringWithFormat:@"%@%@%@%@", digitOne, digitTwo, digitThree, digitFour] intValue];
+    int stringPasscode = [[NSString stringWithFormat:@"%@%@%@%@%@%@", digitOne, digitTwo, digitThree, digitFour, digitFive, digitSix] intValue];
     if (stringPasscode == [dataSource unlockPasscode]) 
     {
         [delegate unlockWasSuccessful];
@@ -402,7 +413,7 @@
             else
             {
                 [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
-                [incorrectAttemptLabel setText:[NSString stringWithFormat:@"No remaining attempts", [dataSource attemptLimit] - attempts]];
+                [incorrectAttemptLabel setText:@"No remaining attempts"];
                 [self lockPad];
                 [delegate attemptsExpired];
                 return;
@@ -420,7 +431,7 @@
 
 - (void)lockPad
 {
-    UIView *lockView = [[[UIView alloc] initWithFrame:CGRectMake(0.0f, 238.0f, self.view.frame.size.width, self.view.frame.size.height - 238.0f)] autorelease];
+    UIView *lockView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 238.0f, self.view.frame.size.width, self.view.frame.size.height - 238.0f)];
     [subTitleLabel setText:nil];
     [lockView setBackgroundColor:[UIColor blackColor]];
     [lockView setAlpha:0.5];
