@@ -17,9 +17,10 @@
 {
     // Override point for customization after application launch.
     YourViewController *YVC = [[YourViewController alloc] init];
-    [self.window addSubview:YVC.view];
-    
+
+    self.window.rootViewController = YVC;
     [self.window makeKeyAndVisible];
+
     return YES;
 }
 
@@ -62,10 +63,5 @@
      */
 }
 
-- (void)dealloc
-{
-    [_window release];
-    [super dealloc];
-}
 
 @end
