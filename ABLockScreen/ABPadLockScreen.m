@@ -27,8 +27,11 @@
 //
 //  3. This notice may not be removed or altered from any source distribution.
 //
+
 #import "ABPadLockScreen.h"
+
 @interface ABPadLockScreen()
+
 @property (nonatomic, strong) UIImageView *keyValueOneImageView;
 @property (nonatomic, strong) UIImageView *keyValueTwoImageView;
 @property (nonatomic, strong) UIImageView *keyValueThreeImageView;
@@ -53,9 +56,11 @@
 - (void)checkPin;
 - (void)lockPad;
 - (UIButton *)getStyledButtonForNumber:(int)number;
+
 @end
 
 @implementation ABPadLockScreen
+
 @synthesize delegate, dataSource;
 @synthesize keyValueOneImageView, keyValueTwoImageView, keyValueThreeImageView, keyValueFourImageView, incorrectAttemptImageView;
 @synthesize incorrectAttemptLabel, subTitleLabel;

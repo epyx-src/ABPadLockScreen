@@ -27,10 +27,13 @@
 //
 //  3. This notice may not be removed or altered from any source distribution.
 //
+
 #import "ABOTPPadLockScreen.h"
 
 #define KEY_VALUE_WIDTH 16
 #define KEY_VALUE_MARGIN 25
+
+#define MAX_PIN_LENGTH 9
 
 @interface ABOTPPadLockScreen()
 
@@ -41,15 +44,7 @@
 
 @property (nonatomic, strong) UILabel *pinCodeLabel;
 
-@property (nonatomic) int digitsPressed;
 @property (nonatomic) int attempts;
-
-@property (nonatomic, strong) NSString *digitOne;
-@property (nonatomic, strong) NSString *digitTwo;
-@property (nonatomic, strong) NSString *digitThree;
-@property (nonatomic, strong) NSString *digitFour;
-@property (nonatomic, strong) NSString *digitFive;
-@property (nonatomic, strong) NSString *digitSix;
 
 - (void)cancelButtonTapped:(id)sender;
 - (void)digitButtonPressed:(id)sender;
@@ -62,12 +57,12 @@
 @end
 
 @implementation ABOTPPadLockScreen
+
 @synthesize delegate, dataSource;
 @synthesize pinCodeLabel;
 @synthesize incorrectAttemptImageView;
 @synthesize incorrectAttemptLabel, subTitleLabel;
-@synthesize digitOne, digitTwo, digitThree, digitFour, digitFive, digitSix;
-@synthesize digitsPressed, attempts;
+@synthesize attempts;
 
 - (id)initWithDelegate:(id<ABOTPPadLockScreenDelegate>)aDelegate withDataSource:(id<ABOTPPadLockScreenDataSource>)aDataSource
 {
@@ -130,6 +125,7 @@
     self.pinCodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(80.0f, 123.0f, 250.0f, 40.0f)];
     self.pinCodeLabel.backgroundColor = [UIColor clearColor];
     self.pinCodeLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:42.0f];
+    self.pinCodeLabel.text = @"";
     [self.view addSubview:self.pinCodeLabel];
 
     //Set the incorrect attempt error background image and label
@@ -260,16 +256,7 @@
 #pragma mark - pubilic methods
 - (void)resetLockScreen
 {
-    [self setDigitsPressed:0];
-
     self.pinCodeLabel.text = @"";
-    
-    [self setDigitOne:nil];
-    [self setDigitTwo:nil];
-    [self setDigitThree:nil];
-    [self setDigitFour:nil];
-    [self setDigitFive:nil];
-    [self setDigitSix:nil];
 }
 
 - (void)resetAttempts
@@ -278,14 +265,15 @@
 }
 
 #pragma mark - button methods
+
 - (void)cancelButtonTapped:(id)sender
 {
     [delegate otpUnlockWasCancelled];
     [self resetLockScreen];
     [incorrectAttemptImageView setImage:nil];
     [incorrectAttemptLabel setText:nil];
-    
 }
+
 - (void)enterButtonTapped:(id)sender
 {
     [self performSelector:@selector(checkPin) withObject:self afterDelay:0.3];
@@ -293,124 +281,45 @@
 
 - (void)backSpaceButtonTapped:(id)sender
 {
-    switch (digitsPressed) 
-    {
-        case 0:
-            break;
-            
-        case 1:
-            digitsPressed = 0;
-            [self setDigitOne:nil];
-            self.pinCodeLabel.text = @"";
-            break;
-            
-        case 2:
-            digitsPressed = 1;
-            [self setDigitTwo:nil];
-            self.pinCodeLabel.text = [self.pinCodeLabel.text substringWithRange:NSMakeRange(0, 1)];
-            break;
-            
-        case 3:
-            digitsPressed = 2;
-            [self setDigitThree:nil];
-            self.pinCodeLabel.text = [self.pinCodeLabel.text substringWithRange:NSMakeRange(0, 2)];
-            break;
-            
-        case 4:
-            digitsPressed = 3;
-            [self setDigitFour:nil];
-            self.pinCodeLabel.text = [self.pinCodeLabel.text substringWithRange:NSMakeRange(0, 3)];
-            break;
-
-        case 5:
-            digitsPressed = 4;
-            [self setDigitFive:nil];
-            self.pinCodeLabel.text = [self.pinCodeLabel.text substringWithRange:NSMakeRange(0, 4)];
-            break;
-
-        default:
-            break;
+    int length = [self.pinCodeLabel.text length];
+    if ( length >= 1 ) {
+        self.pinCodeLabel.text = [self.pinCodeLabel.text substringWithRange:NSMakeRange(0, length-1)];
     }
-    
 }
 
 - (void)digitButtonPressed:(id)sender
 {
     UIButton *button = (UIButton *)sender;
-    
+
     [self digitInputted:button.tag];
 }
 
 - (void)digitInputted:(int)digit
 {
-    switch (digitsPressed) 
-    {
-        case 0:
-            digitsPressed = 1;
-            [self setDigitOne:[NSString stringWithFormat:@"%i", digit]];
-            self.pinCodeLabel.text = self.digitOne;
-            break;
-            
-        case 1:
-            digitsPressed = 2;
-            [self setDigitTwo:[NSString stringWithFormat:@"%i", digit]];
-            self.pinCodeLabel.text = [self.pinCodeLabel.text stringByAppendingFormat:@"%i", digit];
-            break;
-            
-        case 2:
-            digitsPressed = 3;
-            [self setDigitThree:[NSString stringWithFormat:@"%i", digit]];
-            self.pinCodeLabel.text = [self.pinCodeLabel.text stringByAppendingFormat:@"%i", digit];
-            break;
-            
-        case 3:
-            digitsPressed = 4;
-            [self setDigitFour:[NSString stringWithFormat:@"%i", digit]];
-            self.pinCodeLabel.text = [self.pinCodeLabel.text stringByAppendingFormat:@"%i", digit];
-            break;
-            
-        case 4:
-            digitsPressed = 5;
-            [self setDigitFive:[NSString stringWithFormat:@"%i", digit]];
-            self.pinCodeLabel.text = [self.pinCodeLabel.text stringByAppendingFormat:@"%i", digit];
-            break;
-
-        case 5:
-            digitsPressed = 6;
-            [self setDigitSix:[NSString stringWithFormat:@"%i", digit]];
-            self.pinCodeLabel.text = [self.pinCodeLabel.text stringByAppendingFormat:@"%i", digit];
-            break;
-
-        default:
-            break;
+    if ( [self.pinCodeLabel.text length] < MAX_PIN_LENGTH ) {
+        self.pinCodeLabel.text = [self.pinCodeLabel.text stringByAppendingFormat:@"%i", digit];
     }
 }
 
 - (void)checkPin
 {
-    int stringPasscode = [[NSString stringWithFormat:@"%@%@%@%@%@%@", digitOne, digitTwo, digitThree, digitFour, digitFive, digitSix] intValue];
-    if (stringPasscode == [dataSource otpUnlockPasscode])
-    {
+    int stringPasscode = [self.pinCodeLabel.text intValue];
+    if ( stringPasscode == [dataSource otpUnlockPasscode] ) {
         [delegate otpUnlockWasSuccessful];
         [self resetLockScreen];
         [incorrectAttemptImageView setImage:nil];
         [incorrectAttemptLabel setText:nil];
     }
-    else
-    {
+    else {
         attempts += 1;
         [delegate otpUnlockWasUnsuccessful:stringPasscode afterAttemptNumber:attempts];
-        if ([dataSource otpHasAttemptLimit])
-        {
-            
+        if ([dataSource otpHasAttemptLimit]) {
             int remainingAttempts = [dataSource otpAttemptLimit] - attempts;
-            if (remainingAttempts != 0) 
-            {
+            if (remainingAttempts != 0)  {
                 [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
                 [incorrectAttemptLabel setText:[NSString stringWithFormat:@"Incorrect pin. %i attempts left", [dataSource otpAttemptLimit] - attempts]];
             }
-            else
-            {
+            else {
                 [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
                 [incorrectAttemptLabel setText:@"No remaining attempts"];
                 [self lockPad];
@@ -418,8 +327,7 @@
                 return;
             }
         }
-        else
-        {
+        else {
             [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
             [incorrectAttemptLabel setText:[NSString stringWithFormat:@"Incorrect pin"]];
         }
