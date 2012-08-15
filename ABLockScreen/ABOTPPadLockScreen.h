@@ -1,5 +1,5 @@
 //
-//  ABPadLockScreen.h
+//  ABOTPPadLockScreen.h
 //
 //  Version 1.2
 //
@@ -30,37 +30,38 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol ABPadLockScreenDelegate
+@protocol ABOTPPadLockScreenDelegate
 
 @required
-- (void)pinUnlockWasSuccessful;
-- (void)pinUnlockWasUnsuccessful:(int)falseEntryCode afterAttemptNumber:(int)attemptNumber;
-- (void)pinUnlockWasCancelled;
+- (void)otpUnlockWasSuccessful;
+- (void)otpUnlockWasUnsuccessful:(int)falseEntryCode afterAttemptNumber:(int)attemptNumber;
+- (void)otpUnlockWasCancelled;
 
 @optional
-- (void)pinAttemptsExpired;
-@end
-
-@protocol ABPadLockScreenDataSource
-
-@required
-- (int)pinUnlockPasscode;
-- (NSString *)pinPadLockScreenTitleText;
-- (NSString *)pinPadLockScreenSubtitleText;
-- (BOOL)pinHasAttemptLimit;
-
-@optional
-- (int)pinAttemptLimit;
+- (void)otpAttemptsExpired;
 
 @end
 
-@interface ABPadLockScreen : UIViewController
+@protocol ABOTPPadLockScreenDataSource
 
-@property (nonatomic, unsafe_unretained) id<ABPadLockScreenDelegate> delegate;
-@property (nonatomic, unsafe_unretained) id<ABPadLockScreenDataSource> dataSource;
+@required
+- (int)otpUnlockPasscode;
+- (NSString *)otpPadLockScreenTitleText;
+- (NSString *)otpPadLockScreenSubtitleText;
+- (BOOL)otpHasAttemptLimit;
 
-- (id)initWithDelegate:(id<ABPadLockScreenDelegate>)aDelegate
-        withDataSource:(id<ABPadLockScreenDataSource>)aDataSource;
+@optional
+- (int)otpAttemptLimit;
+
+@end
+
+@interface ABOTPPadLockScreen : UIViewController
+
+@property (nonatomic, unsafe_unretained) id<ABOTPPadLockScreenDelegate> delegate;
+@property (nonatomic, unsafe_unretained) id<ABOTPPadLockScreenDataSource> dataSource;
+
+- (id)initWithDelegate:(id<ABOTPPadLockScreenDelegate>)aDelegate
+        withDataSource:(id<ABOTPPadLockScreenDataSource>)aDataSource;
 - (void)resetAttempts;
 - (void)resetLockScreen;
 

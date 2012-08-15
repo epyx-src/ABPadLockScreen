@@ -43,6 +43,8 @@
 		BF09509815D175AA00FE03DA /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = BF09507C15D175AA00FE03DA /* close.png */; };
 		BF09509915D175AA00FE03DA /* error-box.png in Resources */ = {isa = PBXBuildFile; fileRef = BF09507D15D175AA00FE03DA /* error-box.png */; };
 		BF09509A15D175AA00FE03DA /* input.png in Resources */ = {isa = PBXBuildFile; fileRef = BF09507E15D175AA00FE03DA /* input.png */; };
+		BF3A794015DBFD5100E5E8A8 /* ABOTPPadLockScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = BF3A793F15DBFD5100E5E8A8 /* ABOTPPadLockScreen.m */; };
+		BF3A794315DBFDA800E5E8A8 /* background-otp.png in Resources */ = {isa = PBXBuildFile; fileRef = BF3A794215DBFDA800E5E8A8 /* background-otp.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +90,9 @@
 		BF09507C15D175AA00FE03DA /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
 		BF09507D15D175AA00FE03DA /* error-box.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "error-box.png"; sourceTree = "<group>"; };
 		BF09507E15D175AA00FE03DA /* input.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = input.png; sourceTree = "<group>"; };
+		BF3A793E15DBFD5100E5E8A8 /* ABOTPPadLockScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABOTPPadLockScreen.h; sourceTree = "<group>"; };
+		BF3A793F15DBFD5100E5E8A8 /* ABOTPPadLockScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABOTPPadLockScreen.m; sourceTree = "<group>"; };
+		BF3A794215DBFDA800E5E8A8 /* background-otp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-otp.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +169,8 @@
 				BF09506315D175AA00FE03DA /* Assets */,
 				BF09506115D175AA00FE03DA /* ABPadLockScreen.h */,
 				BF09506215D175AA00FE03DA /* ABPadLockScreen.m */,
+				BF3A793E15DBFD5100E5E8A8 /* ABOTPPadLockScreen.h */,
+				BF3A793F15DBFD5100E5E8A8 /* ABOTPPadLockScreen.m */,
 			);
 			name = ABLockScreen;
 			path = ../../ABLockScreen;
@@ -192,6 +199,7 @@
 				BF09507515D175AA00FE03DA /* 8.png */,
 				BF09507615D175AA00FE03DA /* 9-selected.png */,
 				BF09507715D175AA00FE03DA /* 9.png */,
+				BF3A794215DBFDA800E5E8A8 /* background-otp.png */,
 				BF09507815D175AA00FE03DA /* background.png */,
 				BF09507915D175AA00FE03DA /* blank.png */,
 				BF09507A15D175AA00FE03DA /* clear-selected.png */,
@@ -283,6 +291,7 @@
 				BF09509815D175AA00FE03DA /* close.png in Resources */,
 				BF09509915D175AA00FE03DA /* error-box.png in Resources */,
 				BF09509A15D175AA00FE03DA /* input.png in Resources */,
+				BF3A794315DBFDA800E5E8A8 /* background-otp.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +306,7 @@
 				9CB9EFD2141A2641003B990E /* ABPadLockScreenAppDelegate.m in Sources */,
 				9CB9EFE3141A2672003B990E /* YourViewController.m in Sources */,
 				BF09507F15D175AA00FE03DA /* ABPadLockScreen.m in Sources */,
+				BF3A794015DBFD5100E5E8A8 /* ABOTPPadLockScreen.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
