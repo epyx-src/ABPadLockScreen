@@ -39,23 +39,20 @@
 @property (nonatomic, strong) UIImageView *incorrectAttemptImageView;
 
 @property (nonatomic, strong) UILabel *incorrectAttemptLabel;
+@property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *subTitleLabel;
 
 @property (nonatomic) int digitsPressed;
 @property (nonatomic) int attempts;
+@property (nonatomic) int prevPasscode;
 
 @property (nonatomic, strong) NSString *digitOne;
 @property (nonatomic, strong) NSString *digitTwo;
 @property (nonatomic, strong) NSString *digitThree;
 @property (nonatomic, strong) NSString *digitFour;
 
-- (void)cancelButtonTapped:(id)sender;
-- (void)digitButtonPressed:(id)sender;
-- (void)backSpaceButtonTapped:(id)sender;
-- (void)digitInputted:(int)digit;
-- (void)checkPin;
-- (void)lockPad;
-- (UIButton *)getStyledButtonForNumber:(int)number;
+@property (nonatomic) PinMode pinMode;
+@property (nonatomic) PinState pinState;
 
 @end
 
@@ -63,16 +60,20 @@
 
 @synthesize delegate, dataSource;
 @synthesize keyValueOneImageView, keyValueTwoImageView, keyValueThreeImageView, keyValueFourImageView, incorrectAttemptImageView;
-@synthesize incorrectAttemptLabel, subTitleLabel;
+@synthesize incorrectAttemptLabel, titleLabel, subTitleLabel;
 @synthesize digitOne, digitTwo, digitThree, digitFour;
 @synthesize digitsPressed, attempts;
 
-- (id)initWithDelegate:(id<ABPadLockScreenDelegate>)aDelegate withDataSource:(id<ABPadLockScreenDataSource>)aDataSource
+- (id)initWithMode:(PinMode)pinMode
+      withDelegate:(id<ABPadLockScreenDelegate>)aDelegate
+    withDataSource:(id<ABPadLockScreenDataSource>)aDataSource
 {
     self = [super init];
     if (self) {
-        [self setDelegate:aDelegate];
-        [self setDataSource:aDataSource];
+        self.pinMode = pinMode;
+        self.pinState = ( (pinMode == PinModeSet) ? PinStateSet : PinStateCheck );
+        self.delegate = aDelegate;
+        self.dataSource = aDataSource;
     }
     return self;
 }
@@ -98,14 +99,15 @@
     [self.view addSubview:backgroundView];
     
     //Set the title
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 10.0f, self.view.frame.size.width - 40.0f, 20.0f)];
-    [titleLabel setTextAlignment:UITextAlignmentCenter];
-    [titleLabel setBackgroundColor:[UIColor clearColor]];
-    [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:18.0f]];
-    [titleLabel setText:[dataSource pinPadLockScreenTitleText]];
+    UILabel *_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 10.0f, self.view.frame.size.width - 40.0f, 20.0f)];
+    [_titleLabel setTextAlignment:UITextAlignmentCenter];
+    [_titleLabel setBackgroundColor:[UIColor clearColor]];
+    [_titleLabel setTextColor:[UIColor whiteColor]];
+    [_titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:18.0f]];
+    [_titleLabel setText:[dataSource pinPadLockScreenTitleTextForMode:self.pinMode state:self.pinState]];
+    [self setTitleLabel:_titleLabel];
     [self.view addSubview:titleLabel];
-    
+
     //Set the cancel button
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [cancelButton setBackgroundColor:[UIColor clearColor]];
@@ -120,7 +122,7 @@
     [_subtitleLabel setBackgroundColor:[UIColor clearColor]];
     [_subtitleLabel setTextColor:[UIColor blackColor]];
     [_subtitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:14.0f]];
-    [_subtitleLabel setText:[dataSource pinPadLockScreenSubtitleText]];
+    [_subtitleLabel setText:[dataSource pinPadLockScreenSubtitleTextForMode:self.pinMode state:self.pinState]];
     [self setSubTitleLabel:_subtitleLabel];
     [self.view addSubview:subTitleLabel];
     
@@ -255,8 +257,6 @@
                                      rightButtonWidth, 
                                      buttonHeight)];
     [self.view addSubview:clearButton];
-    
-    
 }
 
 - (void)viewDidUnload
@@ -269,11 +269,11 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientations
 	return YES;
 }
 
 #pragma mark - pubilic methods
+
 - (void)resetLockScreen
 {
     [self setDigitsPressed:0];
@@ -295,13 +295,13 @@
 }
 
 #pragma mark - button methods
+
 - (void)cancelButtonTapped:(id)sender
 {
     [delegate pinUnlockWasCancelled];
     [self resetLockScreen];
     [incorrectAttemptImageView setImage:nil];
     [incorrectAttemptLabel setText:nil];
-    
 }
 
 - (void)backSpaceButtonTapped:(id)sender
@@ -368,7 +368,7 @@
             digitsPressed = 4;
             [keyValueFourImageView setImage:[UIImage imageNamed:@"input"]];
             [self setDigitFour:[NSString stringWithFormat:@"%i", digit]];
-            [self performSelector:@selector(checkPin) withObject:self afterDelay:0.3];
+            [self performSelector:@selector(pinEntered) withObject:self afterDelay:0.3];
             
             break;
             
@@ -377,46 +377,112 @@
     }
 }
 
-- (void)checkPin
+- (void)pinEntered
 {
-    int stringPasscode = [[NSString stringWithFormat:@"%@%@%@%@", digitOne, digitTwo, digitThree, digitFour] intValue];
-    if (stringPasscode == [dataSource pinUnlockPasscode])
-    {
-        [delegate pinUnlockWasSuccessful];
-        [self resetLockScreen];
-        [incorrectAttemptImageView setImage:nil];
-        [incorrectAttemptLabel setText:nil];
-    }
-    else
-    {
-        attempts += 1;
-        [delegate pinUnlockWasUnsuccessful:stringPasscode afterAttemptNumber:attempts];
-        if ([dataSource pinHasAttemptLimit])
-        {
-            
-            int remainingAttempts = [dataSource pinAttemptLimit] - attempts;
-            if (remainingAttempts != 0) 
-            {
-                [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
-                [incorrectAttemptLabel setText:[NSString stringWithFormat:@"Incorrect pin. %i attempts left", [dataSource pinAttemptLimit] - attempts]];
+    int passcode = [[NSString stringWithFormat:@"%@%@%@%@", digitOne, digitTwo, digitThree, digitFour] intValue];
+
+    // Mode 'Set' or 'Change'
+    if ( self.pinMode == PinModeSet || self.pinMode == PinModeChange ) {
+        // State 'Set'
+        if ( self.pinState == PinStateSet ) {
+            self.prevPasscode = passcode;
+            self.pinState = PinStateConfirm;
+            [incorrectAttemptImageView setImage:nil];
+            [incorrectAttemptLabel setText:nil];
+            [self annimateTransitionToCurrentState];
+        }
+        // State 'Confirm'
+        else if ( self.pinState == PinStateConfirm ) {
+            if ( self.prevPasscode == passcode ) {
+                [incorrectAttemptImageView setImage:nil];
+                [incorrectAttemptLabel setText:nil];
+                [delegate pinEntryWasSuccessful:passcode]; // alert delegate of successful pin set
             }
-            else
-            {
+            else {
+                [delegate pinSetWasUnsuccessful:self.prevPasscode pinTwo:passcode]; // alert delegate of unsuccessful pin set
                 [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
-                [incorrectAttemptLabel setText:@"No remaining attempts"];
-                [self lockPad];
-                [delegate pinAttemptsExpired];
-                return;
+                [incorrectAttemptLabel setText:@"Pin doesn't match"];
+                self.pinState = ( (self.pinMode == PinModeChange) ? PinStateCheck : PinStateSet );
+                [self resetLockScreen];
+                [self annimateTransitionToCurrentState];
             }
         }
-        else
-        {
-            [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
-            [incorrectAttemptLabel setText:[NSString stringWithFormat:@"Incorrect pin"]];
+        // State 'Check' old pin
+        else if ( self.pinState == PinStateCheck ) {
+            if ( passcode == [dataSource pinUnlockPasscode] ) {
+                self.pinState = PinStateSet;
+                [incorrectAttemptImageView setImage:nil];
+                [incorrectAttemptLabel setText:nil];
+                [self annimateTransitionToCurrentState];
+            }
+            else {
+                [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
+                [incorrectAttemptLabel setText:@"Incorrect old pin"];
+                [self resetLockScreen];
+            }
         }
-        [self resetLockScreen];
     }
-    
+    // Mode 'Unlock'
+    else {
+        if ( passcode == [dataSource pinUnlockPasscode] ) {
+            [delegate pinEntryWasSuccessful:passcode];
+            [self resetLockScreen];
+            [incorrectAttemptImageView setImage:nil];
+            [incorrectAttemptLabel setText:nil];
+        }
+        else {
+            attempts += 1;
+            [delegate pinUnlockWasUnsuccessful:passcode afterAttemptNumber:attempts];
+            if ( [dataSource pinHasAttemptLimit] ) {
+                int remainingAttempts = [dataSource pinAttemptLimit] - attempts;
+                if ( remainingAttempts != 0 ) {
+                    [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
+                    [incorrectAttemptLabel setText:[NSString stringWithFormat:@"Incorrect pin. %i attempts left", [dataSource pinAttemptLimit] - attempts]];
+                }
+                else {
+                    [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
+                    [incorrectAttemptLabel setText:@"No remaining attempts"];
+                    [self lockPad];
+                    [delegate pinAttemptsExpired];
+                    return;
+                }
+            }
+            else {
+                [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
+                [incorrectAttemptLabel setText:[NSString stringWithFormat:@"Incorrect pin"]];
+            }
+            [self resetLockScreen];
+        }
+    }
+}
+
+- (void)annimateTransitionToCurrentState
+{
+    // perform the transition from initial entry to verification
+    NSArray *keys = [NSArray arrayWithObjects:keyValueOneImageView, keyValueTwoImageView, keyValueThreeImageView, keyValueFourImageView, nil];
+
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         for (UIImageView *key in keys ) {
+                             key.alpha = 0.0; // fade out each key
+                         }
+                        [UIView transitionWithView:self.view
+                                          duration:0.5
+                                           options:UIViewAnimationOptionCurveEaseIn
+                                        animations:^{
+                                            [self.titleLabel setText:[dataSource pinPadLockScreenTitleTextForMode:self.pinMode state:self.pinState]];
+                                            [self.subTitleLabel setText:[dataSource pinPadLockScreenSubtitleTextForMode:self.pinMode state:self.pinState]];
+                                        }
+                                        completion:nil
+                         ];
+                     }
+                     completion:^(BOOL finished) {
+                         [self resetLockScreen];
+                         for (UIImageView *key in keys) {
+                             key.alpha = 1.0; // ensure the digits will be visible for next entry
+                         }
+                     }
+     ];
 }
 
 - (void)lockPad

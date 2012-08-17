@@ -30,23 +30,39 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum
+{
+    PinModeSet = 0,
+    PinModeChange,
+    PinModeUnlock
+} PinMode;
+
+typedef enum
+{
+    PinStateCheck = 0,
+    PinStateSet,
+    PinStateConfirm
+} PinState;
+
 @protocol ABPadLockScreenDelegate
 
 @required
-- (void)pinUnlockWasSuccessful;
+- (void)pinEntryWasSuccessful:(int)pin;
 - (void)pinUnlockWasUnsuccessful:(int)falseEntryCode afterAttemptNumber:(int)attemptNumber;
 - (void)pinUnlockWasCancelled;
 
 @optional
 - (void)pinAttemptsExpired;
+- (void)pinSetWasUnsuccessful:(int)pinOne pinTwo:(int)pinTwo;
+
 @end
 
 @protocol ABPadLockScreenDataSource
 
 @required
 - (int)pinUnlockPasscode;
-- (NSString *)pinPadLockScreenTitleText;
-- (NSString *)pinPadLockScreenSubtitleText;
+- (NSString *)pinPadLockScreenTitleTextForMode:(PinMode)mode state:(PinState)state;
+- (NSString *)pinPadLockScreenSubtitleTextForMode:(PinMode)mode state:(PinState)state;
 - (BOOL)pinHasAttemptLimit;
 
 @optional
@@ -58,9 +74,13 @@
 
 @property (nonatomic, unsafe_unretained) id<ABPadLockScreenDelegate> delegate;
 @property (nonatomic, unsafe_unretained) id<ABPadLockScreenDataSource> dataSource;
+@property (nonatomic, readonly) PinMode pinMode;
+@property (nonatomic, readonly) PinState pinState;
 
-- (id)initWithDelegate:(id<ABPadLockScreenDelegate>)aDelegate
-        withDataSource:(id<ABPadLockScreenDataSource>)aDataSource;
+- (id)initWithMode:(PinMode)pinMode
+      withDelegate:(id<ABPadLockScreenDelegate>)aDelegate
+    withDataSource:(id<ABPadLockScreenDataSource>)aDataSource;
+
 - (void)resetAttempts;
 - (void)resetLockScreen;
 
