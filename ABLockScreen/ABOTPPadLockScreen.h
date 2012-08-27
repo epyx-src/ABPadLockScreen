@@ -45,7 +45,7 @@
 @protocol ABOTPPadLockScreenDataSource
 
 @required
-- (int)otpUnlockPasscode;
+- (BOOL)checkOtp:(int)passcode;
 - (NSString *)otpPadLockScreenTitleText;
 - (NSString *)otpPadLockScreenSubtitleText;
 - (BOOL)otpHasAttemptLimit;

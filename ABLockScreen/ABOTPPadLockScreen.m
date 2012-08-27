@@ -304,7 +304,7 @@
 - (void)checkPin
 {
     int stringPasscode = [self.pinCodeLabel.text intValue];
-    if ( stringPasscode == [dataSource otpUnlockPasscode] ) {
+    if ( [dataSource checkOtp:stringPasscode] == YES ) {
         [delegate otpUnlockWasSuccessful];
         [self resetLockScreen];
         [incorrectAttemptImageView setImage:nil];

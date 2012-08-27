@@ -246,10 +246,12 @@
 
 #pragma mark - ABOTPPadLockScreen DataSource methods
 
-- (int)otpUnlockPasscode
+- (BOOL)checkOtp:(int)passcode
 {
-    //Provide the ABLockScreen with a code to verify against
-    return 123456;
+    if ( passcode == 123456 ) {
+        return YES;
+    }
+    return NO;
 }
 
 - (NSString *)otpPadLockScreenTitleText
