@@ -163,10 +163,12 @@
 
 #pragma mark - ABPadLockScreen DataSource methods
 
-- (int)pinUnlockPasscode
+- (BOOL)checkPasscode:(int)passcode
 {
-    //Provide the ABLockScreen with a code to verify against
-    return 1234;
+    if ( passcode == 1234 ) {
+        return YES;
+    }
+    return NO;
 }
 
 - (NSString *)pinPadLockScreenTitleTextForMode:(PinMode)mode state:(PinState)state

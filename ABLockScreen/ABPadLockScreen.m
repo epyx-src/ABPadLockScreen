@@ -409,7 +409,7 @@
         }
         // State 'Check' old pin
         else if ( self.pinState == PinStateCheck ) {
-            if ( passcode == [dataSource pinUnlockPasscode] ) {
+            if ( [dataSource checkPasscode:passcode] == YES ) {
                 self.pinState = PinStateSet;
                 [incorrectAttemptImageView setImage:nil];
                 [incorrectAttemptLabel setText:nil];
@@ -424,7 +424,7 @@
     }
     // Mode 'Unlock'
     else {
-        if ( passcode == [dataSource pinUnlockPasscode] ) {
+        if ( [dataSource checkPasscode:passcode] == YES ) {
             [delegate pinEntryWasSuccessful:passcode];
             [self resetLockScreen];
             [incorrectAttemptImageView setImage:nil];

@@ -60,7 +60,7 @@ typedef enum
 @protocol ABPadLockScreenDataSource
 
 @required
-- (int)pinUnlockPasscode;
+- (BOOL)checkPasscode:(int)passcode;
 - (NSString *)pinPadLockScreenTitleTextForMode:(PinMode)mode state:(PinState)state;
 - (NSString *)pinPadLockScreenSubtitleTextForMode:(PinMode)mode state:(PinState)state;
 - (BOOL)pinHasAttemptLimit;
