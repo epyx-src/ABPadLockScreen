@@ -102,15 +102,25 @@
     [titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:18.0f]];
     [titleLabel setText:[dataSource otpPadLockScreenTitleText]];
     [self.view addSubview:titleLabel];
-    
+
     //Set the cancel button
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [cancelButton setBackgroundColor:[UIColor clearColor]];
-    [cancelButton setFrame:CGRectMake(self.view.frame.size.width - 60.0f, 7.0f, 50.0f, 29.0f)];
-    [cancelButton setBackgroundImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
+    [cancelButton setFrame:CGRectMake(self.view.frame.origin.x + 10.0f, 7.0f, 50.0f, 29.0f)];
+    [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [cancelButton.titleLabel setFont:[UIFont fontWithName:@"Helvetica" size:14.0f]];
     [cancelButton addTarget:self action:@selector(cancelButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cancelButton];
-    
+
+    //Set the check button
+    UIButton *checkButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [checkButton setBackgroundColor:[UIColor clearColor]];
+    [checkButton setFrame:CGRectMake(self.view.frame.size.width - 60.0f, 7.0f, 50.0f, 29.0f)];
+    [checkButton setTitle:@"Check" forState:UIControlStateNormal];
+    [checkButton.titleLabel setFont:[UIFont fontWithName:@"Helvetica" size:14.0f]];
+    [checkButton addTarget:self action:@selector(enterButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:checkButton];
+
     //Set the subtitle label
     UILabel *_subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 70.0f, self.view.frame.size.width - 40.0f, 20.0f)];
     [_subtitleLabel setTextAlignment:UITextAlignmentCenter];
@@ -122,7 +132,8 @@
     [self.view addSubview:subTitleLabel];
 
     //Set the label showing the pin code
-    self.pinCodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(80.0f, 123.0f, 250.0f, 40.0f)];
+    self.pinCodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(40.0f, 123.0f, 250.0f, 40.0f)];
+    self.pinCodeLabel.textAlignment = UITextAlignmentCenter;
     self.pinCodeLabel.backgroundColor = [UIColor clearColor];
     self.pinCodeLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:42.0f];
     self.pinCodeLabel.text = @"";
@@ -132,8 +143,8 @@
     UIImageView *_incorrectAttemptImageView = [[UIImageView alloc] initWithFrame:CGRectMake(60.0f, 190.0f, 216.0f, 20.0f)];
     [self setIncorrectAttemptImageView:_incorrectAttemptImageView];
     [self.view addSubview:incorrectAttemptImageView];
-    
-    UILabel *_incorrectAttemptLabel = [[UILabel alloc] initWithFrame:CGRectMake(incorrectAttemptImageView.frame.origin.x + 10.0f, 
+
+    UILabel *_incorrectAttemptLabel = [[UILabel alloc] initWithFrame:CGRectMake(incorrectAttemptImageView.frame.origin.x + 10.0f,
                                                                                 incorrectAttemptImageView.frame.origin.y + 1.0f, 
                                                                                 incorrectAttemptImageView.frame.size.width - 20.0f, 
                                                                                 incorrectAttemptImageView.frame.size.height - 2.0f)];
@@ -143,67 +154,67 @@
     [_incorrectAttemptLabel setBackgroundColor:[UIColor clearColor]];
     [self setIncorrectAttemptLabel:_incorrectAttemptLabel];
     [self.view addSubview:incorrectAttemptLabel];
-    
+
     //Add buttons
     float buttonTop = 242.0f;
     float buttonHeight = 55.0f;
     float leftButtonWidth = 106.0f;
     float middleButtonWidth = 109.0f;
     float rightButtonWidth = 105.0f;
-    
+
     UIButton *oneButton = [self getStyledButtonForNumber:1];
     [oneButton setFrame:CGRectMake(6.0f, buttonTop, leftButtonWidth, buttonHeight)];
     [self.view addSubview:oneButton];
-    
+
     UIButton *twoButton = [self getStyledButtonForNumber:2];
     [twoButton setFrame:CGRectMake(oneButton.frame.origin.x + oneButton.frame.size.width, 
                                    oneButton.frame.origin.y, 
                                    middleButtonWidth, 
                                    buttonHeight)];
     [self.view addSubview:twoButton];
-    
+
     UIButton *threeButton = [self getStyledButtonForNumber:3];
     [threeButton setFrame:CGRectMake(twoButton.frame.origin.x + twoButton.frame.size.width, 
                                      twoButton.frame.origin.y, 
                                      rightButtonWidth, 
                                      buttonHeight)];
     [self.view addSubview:threeButton];
-    
+
     UIButton *fourButton = [self getStyledButtonForNumber:4];
     [fourButton setFrame:CGRectMake(oneButton.frame.origin.x, 
                                     oneButton.frame.origin.y + oneButton.frame.size.height - 1, 
                                     leftButtonWidth, 
                                     buttonHeight)];
     [self.view addSubview:fourButton];
-    
+
     UIButton *fiveButton = [self getStyledButtonForNumber:5];
     [fiveButton setFrame:CGRectMake(twoButton.frame.origin.x, 
                                     fourButton.frame.origin.y, 
                                     middleButtonWidth, 
                                     buttonHeight)];
     [self.view addSubview:fiveButton];
-    
+
     UIButton *sixButton = [self getStyledButtonForNumber:6];
     [sixButton setFrame:CGRectMake(threeButton.frame.origin.x, 
                                    fiveButton.frame.origin.y, 
                                    rightButtonWidth, 
                                    buttonHeight)];
     [self.view addSubview:sixButton];
-    
+
     UIButton *sevenButton = [self getStyledButtonForNumber:7];
     [sevenButton setFrame:CGRectMake(oneButton.frame.origin.x, 
                                      fourButton.frame.origin.y + fourButton.frame.size.height - 1, 
                                      leftButtonWidth, 
                                      buttonHeight)];
     [self.view addSubview:sevenButton];
-    
+
     UIButton *eightButton = [self getStyledButtonForNumber:8];
     [eightButton setFrame:CGRectMake(twoButton.frame.origin.x, 
                                      sevenButton.frame.origin.y, 
                                      middleButtonWidth, 
                                      buttonHeight)];
     [self.view addSubview:eightButton];
-    
+
     UIButton *nineButton = [self getStyledButtonForNumber:9];
     [nineButton setFrame:CGRectMake(threeButton.frame.origin.x, 
                                     sevenButton.frame.origin.y, 
@@ -211,23 +222,22 @@
                                     buttonHeight)];
     [self.view addSubview:nineButton];
 
-    UIButton *enterButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [enterButton setBackgroundImage:[UIImage imageNamed:@"blank"] forState:UIControlStateNormal];
-    [enterButton setBackgroundImage:[UIImage imageNamed:@"blank-selected"] forState:UIControlStateHighlighted];
-    [enterButton addTarget:self action:@selector(enterButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [enterButton setFrame:CGRectMake(sevenButton.frame.origin.x,
+    UIButton *blankButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [blankButton setBackgroundImage:[UIImage imageNamed:@"blank"] forState:UIControlStateNormal];
+    [blankButton setBackgroundImage:[UIImage imageNamed:@"blank-selected"] forState:UIControlStateHighlighted];
+    [blankButton setFrame:CGRectMake(sevenButton.frame.origin.x,
                                      sevenButton.frame.origin.y + sevenButton.frame.size.height - 1, 
                                      leftButtonWidth, 
                                      buttonHeight)];
-    [self.view addSubview:enterButton];
+    [self.view addSubview:blankButton];
 
     UIButton *zeroButton = [self getStyledButtonForNumber:0];
     [zeroButton setFrame:CGRectMake(twoButton.frame.origin.x, 
-                                    enterButton.frame.origin.y, 
+                                    blankButton.frame.origin.y, 
                                     middleButtonWidth, 
                                     buttonHeight)];
     [self.view addSubview:zeroButton];
-    
+
     UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [clearButton setBackgroundImage:[UIImage imageNamed:@"clear"] forState:UIControlStateNormal];
     [clearButton setBackgroundImage:[UIImage imageNamed:@"clear-selected"] forState:UIControlStateHighlighted];
@@ -346,6 +356,7 @@
 }
 
 #pragma mark - private methods
+
 - (UIButton *)getStyledButtonForNumber:(int)number
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
