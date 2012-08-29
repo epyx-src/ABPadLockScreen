@@ -109,6 +109,7 @@
     [cancelButton setFrame:CGRectMake(self.view.frame.origin.x + 10.0f, 7.0f, 50.0f, 29.0f)];
     [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [cancelButton.titleLabel setFont:[UIFont fontWithName:@"Helvetica" size:14.0f]];
+    [cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
     [cancelButton addTarget:self action:@selector(cancelButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cancelButton];
 
@@ -118,6 +119,7 @@
     [checkButton setFrame:CGRectMake(self.view.frame.size.width - 60.0f, 7.0f, 50.0f, 29.0f)];
     [checkButton setTitle:@"Check" forState:UIControlStateNormal];
     [checkButton.titleLabel setFont:[UIFont fontWithName:@"Helvetica" size:14.0f]];
+    [checkButton setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
     [checkButton addTarget:self action:@selector(enterButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:checkButton];
 

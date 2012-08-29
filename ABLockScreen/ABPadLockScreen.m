@@ -70,10 +70,11 @@
 {
     self = [super init];
     if (self) {
-        self.pinMode = pinMode;
-        self.pinState = ( (pinMode == PinModeSet) ? PinStateSet : PinStateCheck );
-        self.delegate = aDelegate;
-        self.dataSource = aDataSource;
+        _pinMode = pinMode;
+        _pinState = ( (pinMode == PinModeSet) ? PinStateSet : PinStateCheck );
+        delegate = aDelegate;
+        dataSource = aDataSource;
+        _showCancelButton = ( (pinMode == PinModeUnlock) ? NO : YES );
     }
     return self;
 }
@@ -93,11 +94,11 @@
     [super viewDidLoad];
     [self.view setFrame:CGRectMake(0.0f, 0.0f, 332.0f, 465.0f)];//size of unlock pad
     [self.view setBackgroundColor:[UIColor clearColor]];
-    
+
     //Set the background view
     UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"background"]];
     [self.view addSubview:backgroundView];
-    
+
     //Set the title
     UILabel *_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 10.0f, self.view.frame.size.width - 40.0f, 20.0f)];
     [_titleLabel setTextAlignment:UITextAlignmentCenter];
@@ -109,13 +110,17 @@
     [self.view addSubview:titleLabel];
 
     //Set the cancel button
-    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [cancelButton setBackgroundColor:[UIColor clearColor]];
-    [cancelButton setFrame:CGRectMake(self.view.frame.size.width - 60.0f, 7.0f, 50.0f, 29.0f)];
-    [cancelButton setBackgroundImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
-    [cancelButton addTarget:self action:@selector(cancelButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:cancelButton];
-    
+    if ( self.showCancelButton ) {
+        UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [cancelButton setBackgroundColor:[UIColor clearColor]];
+        [cancelButton setFrame:CGRectMake(self.view.frame.origin.x + 10.0f, 7.0f, 50.0f, 29.0f)];
+        [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+        [cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
+        [cancelButton.titleLabel setFont:[UIFont fontWithName:@"Helvetica" size:14.0f]];
+        [cancelButton addTarget:self action:@selector(cancelButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:cancelButton];
+    }
+
     //Set the subtitle label
     UILabel *_subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 70.0f, self.view.frame.size.width - 40.0f, 20.0f)];
     [_subtitleLabel setTextAlignment:UITextAlignmentCenter];
@@ -125,36 +130,36 @@
     [_subtitleLabel setText:[dataSource pinPadLockScreenSubtitleTextForMode:self.pinMode state:self.pinState]];
     [self setSubTitleLabel:_subtitleLabel];
     [self.view addSubview:subTitleLabel];
-    
+
     //Set the (currently empty) key value images (dots that appear when the user presses a button)
     UIImageView *_keyValueImageOne = [[UIImageView alloc] initWithFrame:CGRectMake(52.0f, 133.0f, 16.0f, 16.0f)];
     [self setKeyValueOneImageView:_keyValueImageOne];
     [self.view addSubview:keyValueOneImageView];
-    
+
     UIImageView *_keyValueImageTwo = [[UIImageView alloc] initWithFrame:CGRectMake(123.0f, keyValueOneImageView.frame.origin.y, 16.0f, 16.0f)];
     [self setKeyValueTwoImageView:_keyValueImageTwo];
     [self.view addSubview:keyValueTwoImageView];
-    
-    UIImageView *_keyValueImageThree = [[UIImageView alloc] initWithFrame:CGRectMake(194.0f, 
+
+    UIImageView *_keyValueImageThree = [[UIImageView alloc] initWithFrame:CGRectMake(194.0f,
                                                                                      keyValueOneImageView.frame.origin.y, 
                                                                                      16.0f, 
                                                                                      16.0f)];
     [self setKeyValueThreeImageView:_keyValueImageThree];
     [self.view addSubview:keyValueThreeImageView];
-    
-    UIImageView *_keyValueImageFour = [[UIImageView alloc] initWithFrame:CGRectMake(265.0f, 
+
+    UIImageView *_keyValueImageFour = [[UIImageView alloc] initWithFrame:CGRectMake(265.0f,
                                                                                     keyValueOneImageView.frame.origin.y, 
                                                                                     16.0f, 
                                                                                     16.0f)];
     [self setKeyValueFourImageView:_keyValueImageFour];
     [self.view addSubview:keyValueFourImageView];
-    
+
     //Set the incorrect attempt error background image and label
     UIImageView *_incorrectAttemptImageView = [[UIImageView alloc] initWithFrame:CGRectMake(60.0f, 190.0f, 216.0f, 20.0f)];
     [self setIncorrectAttemptImageView:_incorrectAttemptImageView];
     [self.view addSubview:incorrectAttemptImageView];
-    
-    UILabel *_incorrectAttemptLabel = [[UILabel alloc] initWithFrame:CGRectMake(incorrectAttemptImageView.frame.origin.x + 10.0f, 
+
+    UILabel *_incorrectAttemptLabel = [[UILabel alloc] initWithFrame:CGRectMake(incorrectAttemptImageView.frame.origin.x + 10.0f,
                                                                                 incorrectAttemptImageView.frame.origin.y + 1.0f, 
                                                                                 incorrectAttemptImageView.frame.size.width - 20.0f, 
                                                                                 incorrectAttemptImageView.frame.size.height - 2.0f)];
@@ -164,18 +169,18 @@
     [_incorrectAttemptLabel setBackgroundColor:[UIColor clearColor]];
     [self setIncorrectAttemptLabel:_incorrectAttemptLabel];
     [self.view addSubview:incorrectAttemptLabel];
-    
+
     //Add buttons
     float buttonTop = 242.0f;
     float buttonHeight = 55.0f;
     float leftButtonWidth = 106.0f;
     float middleButtonWidth = 109.0f;
     float rightButtonWidth = 105.0f;
-    
+
     UIButton *oneButton = [self getStyledButtonForNumber:1];
     [oneButton setFrame:CGRectMake(6.0f, buttonTop, leftButtonWidth, buttonHeight)];
     [self.view addSubview:oneButton];
-    
+
     UIButton *twoButton = [self getStyledButtonForNumber:2];
     [twoButton setFrame:CGRectMake(oneButton.frame.origin.x + oneButton.frame.size.width, 
                                    oneButton.frame.origin.y, 
