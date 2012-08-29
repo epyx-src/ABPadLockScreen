@@ -401,7 +401,7 @@
             if ( self.prevPasscode == passcode ) {
                 [incorrectAttemptImageView setImage:nil];
                 [incorrectAttemptLabel setText:nil];
-                [delegate pinEntryWasSuccessful:passcode]; // alert delegate of successful pin set
+                [delegate pinEntryWasSuccessful:passcode forMode:self.pinMode]; // alert delegate of successful pin set
             }
             else {
                 [delegate pinSetWasUnsuccessful:self.prevPasscode pinTwo:passcode]; // alert delegate of unsuccessful pin set
@@ -430,7 +430,7 @@
     // Mode 'Unlock'
     else {
         if ( [dataSource checkPasscode:passcode] == YES ) {
-            [delegate pinEntryWasSuccessful:passcode];
+            [delegate pinEntryWasSuccessful:passcode forMode:self.pinMode];
             [self resetLockScreen];
             [incorrectAttemptImageView setImage:nil];
             [incorrectAttemptLabel setText:nil];

@@ -47,7 +47,7 @@ typedef enum
 @protocol ABPadLockScreenDelegate
 
 @required
-- (void)pinEntryWasSuccessful:(int)pin;
+- (void)pinEntryWasSuccessful:(int)pin forMode:(PinMode)mode;
 - (void)pinUnlockWasUnsuccessful:(int)falseEntryCode afterAttemptNumber:(int)attemptNumber;
 - (void)pinUnlockWasCancelled;
 

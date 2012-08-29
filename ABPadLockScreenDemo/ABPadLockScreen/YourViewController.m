@@ -133,7 +133,7 @@
 
 #pragma mark - ABPadLockScreen Delegate methods
 
-- (void)pinEntryWasSuccessful:(int)pin
+- (void)pinEntryWasSuccessful:(int)pin forMode:(PinMode)mode
 {
     //Perform any action needed when the unlock was successfull (usually remove the lock view and then load another view)
     [self dismissModalViewControllerAnimated:YES];
