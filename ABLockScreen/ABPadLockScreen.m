@@ -507,6 +507,7 @@
     NSString *altImageName = [NSString stringWithFormat:@"%@-selected", imageName];
     [button setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
     [button setBackgroundImage:[UIImage imageNamed:altImageName] forState:UIControlStateHighlighted];
+    [button setAccessibilityIdentifier:[NSString stringWithFormat:@"pinButton%d", number]];
     [button setTag:number];
     [button addTarget:self action:@selector(digitButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     return button;
