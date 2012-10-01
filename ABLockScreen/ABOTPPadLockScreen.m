@@ -107,7 +107,8 @@
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [cancelButton setBackgroundColor:[UIColor clearColor]];
     [cancelButton setFrame:CGRectMake(self.view.frame.origin.x + 10.0f, 7.0f, 50.0f, 29.0f)];
-    [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [cancelButton setTitle:NSLocalizedStringFromTable(@"ABLOCKSCREEN_Cancel", @"ABPadLockScreen", nil)
+                  forState:UIControlStateNormal];
     [cancelButton.titleLabel setFont:[UIFont fontWithName:@"Helvetica" size:14.0f]];
     [cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
     [cancelButton addTarget:self action:@selector(cancelButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -117,7 +118,8 @@
     UIButton *checkButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [checkButton setBackgroundColor:[UIColor clearColor]];
     [checkButton setFrame:CGRectMake(self.view.frame.size.width - 60.0f, 7.0f, 50.0f, 29.0f)];
-    [checkButton setTitle:@"Check" forState:UIControlStateNormal];
+    [checkButton setTitle:NSLocalizedStringFromTable(@"ABLOCKSCREEN_Check", @"ABPadLockScreen", nil)
+                 forState:UIControlStateNormal];
     [checkButton.titleLabel setFont:[UIFont fontWithName:@"Helvetica" size:14.0f]];
     [checkButton setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
     [checkButton addTarget:self action:@selector(enterButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -329,11 +331,13 @@
             int remainingAttempts = [dataSource otpAttemptLimit] - attempts;
             if (remainingAttempts != 0)  {
                 [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
-                [incorrectAttemptLabel setText:[NSString stringWithFormat:@"Incorrect pin. %i attempts left", [dataSource otpAttemptLimit] - attempts]];
+                [incorrectAttemptLabel setText:
+                 [NSString stringWithFormat:NSLocalizedStringFromTable(@"ABLOCKSCREEN_IncorrectPinAttemptsLeft", @"ABPadLockScreen", nil),
+                  [dataSource otpAttemptLimit] - attempts]];
             }
             else {
                 [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
-                [incorrectAttemptLabel setText:@"No remaining attempts"];
+                [incorrectAttemptLabel setText:NSLocalizedStringFromTable(@"ABLOCKSCREEN_NoRemainingAttempt", @"ABPadLockScreen", nil)];
                 [self lockPad];
                 [delegate otpAttemptsExpired];
                 return;
@@ -341,7 +345,7 @@
         }
         else {
             [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
-            [incorrectAttemptLabel setText:[NSString stringWithFormat:@"Incorrect pin"]];
+            [incorrectAttemptLabel setText:NSLocalizedStringFromTable(@"ABLOCKSCREEN_IncorrectPin", @"ABPadLockScreen", nil)];
         }
         [self resetLockScreen];
     }

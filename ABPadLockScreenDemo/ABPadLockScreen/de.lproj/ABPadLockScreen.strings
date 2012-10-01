@@ -1,0 +1,58 @@
+/* 
+  ABPadLockScreen.strings
+  ABPadLockScreen
+*/
+
+/* ABLOCKSCREEN_Cancel */
+"ABLOCKSCREEN_Cancel" = "Cancel";
+
+/* ABLOCKSCREEN_Check */
+"ABLOCKSCREEN_Check" = "Check";
+
+/* ABLOCKSCREEN_PinDoesnotMatch */
+"ABLOCKSCREEN_PinDoesnotMatch" = "Pin doesn't match";
+
+/* ABLOCKSCREEN_IncorrectOldPin */
+"ABLOCKSCREEN_IncorrectOldPin" = "Incorrect old pin";
+
+/* ABLOCKSCREEN_IncorrectPinAttemptsLeft */
+"ABLOCKSCREEN_IncorrectPinAttemptsLeft" = "Incorrect pin. %i attempts left";
+
+/* ABLOCKSCREEN_NoRemainingAttempt */
+"ABLOCKSCREEN_NoRemainingAttempt" = "No remaining attempts";
+
+/* ABLOCKSCREEN_IncorrectPin */
+"ABLOCKSCREEN_IncorrectPin" = "Incorrect pin";
+
+/* ABLOCKSCREEN_SetPasscode_Title */
+"ABLOCKSCREEN_SetPasscode_Title" = "Set passcode";
+
+/* ABLOCKSCREEN_SetPasscode_SubtitleEnter */
+"ABLOCKSCREEN_SetPasscode_SubtitleEnter" = "Enter a passcode";
+
+/* ABLOCKSCREEN_SetPasscode_SubtitleConfirm */
+"ABLOCKSCREEN_SetPasscode_SubtitleConfirm" = "Re-enter your passcode";
+
+/* ABLOCKSCREEN_ChangePasscode_Title */
+"ABLOCKSCREEN_ChangePasscode_Title" = "Change passcode";
+
+/* ABLOCKSCREEN_ChangePasscode_SubtitleEnterOld */
+"ABLOCKSCREEN_ChangePasscode_SubtitleEnterOld" = "Enter your old passcode";
+
+/* ABLOCKSCREEN_ChangePasscode_SubtitleEnterNew */
+"ABLOCKSCREEN_ChangePasscode_SubtitleEnterNew" = "Enter your new passcode";
+
+/* ABLOCKSCREEN_ChangePasscode_SubtitleConfirm */
+"ABLOCKSCREEN_ChangePasscode_SubtitleConfirm" = "Re-enter your new passcode";
+
+/* ABLOCKSCREEN_EnterPasscode_Title */
+"ABLOCKSCREEN_EnterPasscode_Title" = "Enter passcode";
+
+/* ABLOCKSCREEN_EnterPasscode_SubtitleEnter */
+"ABLOCKSCREEN_EnterPasscode_SubtitleEnter" = "Enter your passcode";
+
+/* ABLOCKSCREEN_EnterOTP_Title */
+"ABLOCKSCREEN_EnterOTP_Title" = "Enter code";
+
+/* ABLOCKSCREEN_EnterOTP_SubtitleEnter */
+"ABLOCKSCREEN_EnterOTP_SubtitleEnter" = "Enter your authenticator code";

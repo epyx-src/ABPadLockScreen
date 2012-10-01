@@ -175,12 +175,12 @@
 {
     //Provide the text for the lock screen title here
     if ( mode == PinModeSet ) {
-        return @"Set your PIN";
+        return NSLocalizedStringFromTable(@"ABLOCKSCREEN_SetPasscode_Title", @"ABPadLockScreen", nil);
     }
     else if ( mode == PinModeChange ) {
-        return @"Change your PIN";
+        return NSLocalizedStringFromTable(@"ABLOCKSCREEN_ChangePasscode_Title", @"ABPadLockScreen", nil);
     }
-    return @"Enter PIN";
+    return NSLocalizedStringFromTable(@"ABLOCKSCREEN_EnterPasscode_Title", @"ABPadLockScreen", nil);
 }
 
 - (NSString *)pinPadLockScreenSubtitleTextForMode:(PinMode)mode state:(PinState)state
@@ -188,24 +188,24 @@
     //Provide the text for the lock screen subtitle here
     if ( mode == PinModeSet ) {
         if ( state == PinStateConfirm ) {
-            return @"Please re-enter your PIN";
+            return NSLocalizedStringFromTable(@"ABLOCKSCREEN_SetPasscode_SubtitleConfirm", @"ABPadLockScreen", nil);
         }
         else {
-            return @"Please enter your PIN";
+            return NSLocalizedStringFromTable(@"ABLOCKSCREEN_SetPasscode_SubtitleEnter", @"ABPadLockScreen", nil);
         }
     }
     else if ( mode == PinModeChange ) {
         if ( state == PinStateCheck ) {
-            return @"Please enter your old PIN";
+            return NSLocalizedStringFromTable(@"ABLOCKSCREEN_ChangePasscode_SubtitleEnterOld", @"ABPadLockScreen", nil);
         }
         else if ( state == PinStateConfirm ) {
-            return @"Please re-enter your new PIN";
+            return NSLocalizedStringFromTable(@"ABLOCKSCREEN_ChangePasscode_SubtitleConfirm", @"ABPadLockScreen", nil);
         }
         else {
-            return @"Please enter your new PIN";
+            return NSLocalizedStringFromTable(@"ABLOCKSCREEN_ChangePasscode_SubtitleEnterNew", @"ABPadLockScreen", nil);
         }
     }
-    return @"Please enter your PIN";
+    return NSLocalizedStringFromTable(@"ABLOCKSCREEN_EnterPasscode_SubtitleEnter", @"ABPadLockScreen", nil);
 }
 
 - (BOOL)pinHasAttemptLimit
@@ -259,13 +259,13 @@
 - (NSString *)otpPadLockScreenTitleText
 {
     //Provide the text for the lock screen title here
-    return @"Enter OTP";
+    return NSLocalizedStringFromTable(@"ABLOCKSCREEN_EnterOTP_Title", @"ABPadLockScreen", nil);
 }
 
 - (NSString *)otpPadLockScreenSubtitleText
 {
     //Provide the text for the lock screen subtitle here
-    return @"Please enter your one time password";
+    return NSLocalizedStringFromTable(@"ABLOCKSCREEN_EnterOTP_SubtitleEnter", @"ABPadLockScreen", nil);
 }
 
 - (BOOL)otpHasAttemptLimit

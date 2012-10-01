@@ -114,7 +114,8 @@
         UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [cancelButton setBackgroundColor:[UIColor clearColor]];
         [cancelButton setFrame:CGRectMake(self.view.frame.origin.x + 10.0f, 7.0f, 50.0f, 29.0f)];
-        [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+        [cancelButton setTitle:NSLocalizedStringFromTable(@"ABLOCKSCREEN_Cancel", @"ABPadLockScreen", nil)
+                      forState:UIControlStateNormal];
         [cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
         [cancelButton.titleLabel setFont:[UIFont fontWithName:@"Helvetica" size:14.0f]];
         [cancelButton addTarget:self action:@selector(cancelButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -155,13 +156,13 @@
     [self.view addSubview:keyValueFourImageView];
 
     //Set the incorrect attempt error background image and label
-    UIImageView *_incorrectAttemptImageView = [[UIImageView alloc] initWithFrame:CGRectMake(60.0f, 190.0f, 216.0f, 20.0f)];
+    UIImageView *_incorrectAttemptImageView = [[UIImageView alloc] initWithFrame:CGRectMake(45.0f, 190.0f, 236.0f, 20.0f)];
     [self setIncorrectAttemptImageView:_incorrectAttemptImageView];
     [self.view addSubview:incorrectAttemptImageView];
 
     UILabel *_incorrectAttemptLabel = [[UILabel alloc] initWithFrame:CGRectMake(incorrectAttemptImageView.frame.origin.x + 10.0f,
                                                                                 incorrectAttemptImageView.frame.origin.y + 1.0f, 
-                                                                                incorrectAttemptImageView.frame.size.width - 20.0f, 
+                                                                                incorrectAttemptImageView.frame.size.width - 10.0f,
                                                                                 incorrectAttemptImageView.frame.size.height - 2.0f)];
     [_incorrectAttemptLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:12.0f]];
     [_incorrectAttemptLabel setTextAlignment:UITextAlignmentCenter];
@@ -406,7 +407,7 @@
             else {
                 [delegate pinSetWasUnsuccessful:self.prevPasscode pinTwo:passcode]; // alert delegate of unsuccessful pin set
                 [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
-                [incorrectAttemptLabel setText:@"Pin doesn't match"];
+                [incorrectAttemptLabel setText:NSLocalizedStringFromTable(@"ABLOCKSCREEN_PinDoesnotMatch", @"ABPadLockScreen", nil)];
                 self.pinState = ( (self.pinMode == PinModeChange) ? PinStateCheck : PinStateSet );
                 [self resetLockScreen];
                 [self annimateTransitionToCurrentState];
@@ -422,7 +423,7 @@
             }
             else {
                 [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
-                [incorrectAttemptLabel setText:@"Incorrect old pin"];
+                [incorrectAttemptLabel setText:NSLocalizedStringFromTable(@"ABLOCKSCREEN_IncorrectOldPin", @"ABPadLockScreen", nil)];
                 [self resetLockScreen];
             }
         }
@@ -442,11 +443,13 @@
                 int remainingAttempts = [dataSource pinAttemptLimit] - attempts;
                 if ( remainingAttempts != 0 ) {
                     [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
-                    [incorrectAttemptLabel setText:[NSString stringWithFormat:@"Incorrect pin. %i attempts left", [dataSource pinAttemptLimit] - attempts]];
+                    [incorrectAttemptLabel setText:
+                     [NSString stringWithFormat:NSLocalizedStringFromTable(@"ABLOCKSCREEN_IncorrectPinAttemptsLeft", @"ABPadLockScreen", nil),
+                      [dataSource pinAttemptLimit] - attempts]];
                 }
                 else {
                     [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
-                    [incorrectAttemptLabel setText:@"No remaining attempts"];
+                    [incorrectAttemptLabel setText:NSLocalizedStringFromTable(@"ABLOCKSCREEN_NoRemainingAttempt", @"ABPadLockScreen", nil)];
                     [self lockPad];
                     [delegate pinAttemptsExpired];
                     return;
@@ -454,7 +457,7 @@
             }
             else {
                 [incorrectAttemptImageView setImage:[UIImage imageNamed:@"error-box"]];
-                [incorrectAttemptLabel setText:[NSString stringWithFormat:@"Incorrect pin"]];
+                [incorrectAttemptLabel setText:NSLocalizedStringFromTable(@"ABLOCKSCREEN_IncorrectPin", @"ABPadLockScreen", nil)];
             }
             [self resetLockScreen];
         }
