@@ -1,58 +1,53 @@
-/* 
-  ABPadLockScreen.strings
-  ABPadLockScreen
-*/
-
 /* ABLOCKSCREEN_Cancel */
-"ABLOCKSCREEN_Cancel" = "Cancel";
+"ABLOCKSCREEN_Cancel" = "Annulla";
 
 /* ABLOCKSCREEN_Check */
-"ABLOCKSCREEN_Check" = "Check";
+"ABLOCKSCREEN_Check" = "Controlla";
 
 /* ABLOCKSCREEN_PinDoesnotMatch */
-"ABLOCKSCREEN_PinDoesnotMatch" = "Pin doesn't match";
+"ABLOCKSCREEN_PinDoesnotMatch" = "Codice di accesso errato.";
 
 /* ABLOCKSCREEN_IncorrectOldPin */
-"ABLOCKSCREEN_IncorrectOldPin" = "Incorrect old pin";
+"ABLOCKSCREEN_IncorrectOldPin" = "Vecchio codice errato.";
 
 /* ABLOCKSCREEN_IncorrectPinAttemptsLeft */
-"ABLOCKSCREEN_IncorrectPinAttemptsLeft" = "Incorrect pin. %i attempts left";
+"ABLOCKSCREEN_IncorrectPinAttemptsLeft" = "Codice errato. %i tentativi rimasti.";
 
 /* ABLOCKSCREEN_NoRemainingAttempt */
-"ABLOCKSCREEN_NoRemainingAttempt" = "No remaining attempts";
+"ABLOCKSCREEN_NoRemainingAttempt" = "Tentativi ultimati.";
 
 /* ABLOCKSCREEN_IncorrectPin */
-"ABLOCKSCREEN_IncorrectPin" = "Incorrect pin";
+"ABLOCKSCREEN_IncorrectPin" = "Codice errato.";
 
 /* ABLOCKSCREEN_SetPasscode_Title */
-"ABLOCKSCREEN_SetPasscode_Title" = "Set passcode";
+"ABLOCKSCREEN_SetPasscode_Title" = "Imposta il codice di accesso";
 
 /* ABLOCKSCREEN_SetPasscode_SubtitleEnter */
-"ABLOCKSCREEN_SetPasscode_SubtitleEnter" = "Enter a passcode";
+"ABLOCKSCREEN_SetPasscode_SubtitleEnter" = "Inserisci un codice di accesso";
 
 /* ABLOCKSCREEN_SetPasscode_SubtitleConfirm */
-"ABLOCKSCREEN_SetPasscode_SubtitleConfirm" = "Re-enter your passcode";
+"ABLOCKSCREEN_SetPasscode_SubtitleConfirm" = "Inserisci nuovamente il codice di accesso";
 
 /* ABLOCKSCREEN_ChangePasscode_Title */
-"ABLOCKSCREEN_ChangePasscode_Title" = "Change passcode";
+"ABLOCKSCREEN_ChangePasscode_Title" = "Modifica il codice di accesso";
 
 /* ABLOCKSCREEN_ChangePasscode_SubtitleEnterOld */
-"ABLOCKSCREEN_ChangePasscode_SubtitleEnterOld" = "Enter your old passcode";
+"ABLOCKSCREEN_ChangePasscode_SubtitleEnterOld" = "Inserisci il tuo vecchio codice di accesso";
 
 /* ABLOCKSCREEN_ChangePasscode_SubtitleEnterNew */
-"ABLOCKSCREEN_ChangePasscode_SubtitleEnterNew" = "Enter your new passcode";
+"ABLOCKSCREEN_ChangePasscode_SubtitleEnterNew" = "Inserisci il tuo nuovo codice di accesso";
 
 /* ABLOCKSCREEN_ChangePasscode_SubtitleConfirm */
-"ABLOCKSCREEN_ChangePasscode_SubtitleConfirm" = "Re-enter your new passcode";
+"ABLOCKSCREEN_ChangePasscode_SubtitleConfirm" = "Inserisci nuovamente il tuo codice di accesso";
 
 /* ABLOCKSCREEN_EnterPasscode_Title */
-"ABLOCKSCREEN_EnterPasscode_Title" = "Enter passcode";
+"ABLOCKSCREEN_EnterPasscode_Title" = "Inserire il codice di accesso";
 
 /* ABLOCKSCREEN_EnterPasscode_SubtitleEnter */
-"ABLOCKSCREEN_EnterPasscode_SubtitleEnter" = "Enter your passcode";
+"ABLOCKSCREEN_EnterPasscode_SubtitleEnter" = "Inserisci il tuo codice di accesso";
 
 /* ABLOCKSCREEN_EnterOTP_Title */
-"ABLOCKSCREEN_EnterOTP_Title" = "Enter code";
+"ABLOCKSCREEN_EnterOTP_Title" = "Inserire il codice";
 
 /* ABLOCKSCREEN_EnterOTP_SubtitleEnter */
-"ABLOCKSCREEN_EnterOTP_SubtitleEnter" = "Enter your authenticator code";
+"ABLOCKSCREEN_EnterOTP_SubtitleEnter" = "Inserisci il tuo codice di autenticazione";
