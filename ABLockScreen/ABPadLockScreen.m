@@ -101,7 +101,7 @@
 
     //Set the title
     UILabel *_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 10.0f, self.view.frame.size.width - 40.0f, 20.0f)];
-    [_titleLabel setTextAlignment:UITextAlignmentCenter];
+    [_titleLabel setTextAlignment:NSTextAlignmentCenter];
     [_titleLabel setBackgroundColor:[UIColor clearColor]];
     [_titleLabel setTextColor:[UIColor whiteColor]];
     [_titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:18.0f]];
@@ -124,7 +124,7 @@
 
     //Set the subtitle label
     UILabel *_subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 70.0f, self.view.frame.size.width - 40.0f, 20.0f)];
-    [_subtitleLabel setTextAlignment:UITextAlignmentCenter];
+    [_subtitleLabel setTextAlignment:NSTextAlignmentCenter];
     [_subtitleLabel setBackgroundColor:[UIColor clearColor]];
     [_subtitleLabel setTextColor:[UIColor blackColor]];
     [_subtitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:14.0f]];
@@ -165,7 +165,7 @@
                                                                                 incorrectAttemptImageView.frame.size.width - 10.0f,
                                                                                 incorrectAttemptImageView.frame.size.height - 2.0f)];
     [_incorrectAttemptLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:12.0f]];
-    [_incorrectAttemptLabel setTextAlignment:UITextAlignmentCenter];
+    [_incorrectAttemptLabel setTextAlignment:NSTextAlignmentCenter];
     [_incorrectAttemptLabel setTextColor:[UIColor whiteColor]];
     [_incorrectAttemptLabel setBackgroundColor:[UIColor clearColor]];
     [self setIncorrectAttemptLabel:_incorrectAttemptLabel];
