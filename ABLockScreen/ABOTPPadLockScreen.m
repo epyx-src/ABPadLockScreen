@@ -137,7 +137,7 @@
 
     //Set the label showing the pin code
     self.pinCodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(40.0f, 123.0f, 250.0f, 40.0f)];
-    self.pinCodeLabel.textAlignment = UITextAlignmentCenter;
+    self.pinCodeLabel.textAlignment = NSTextAlignmentCenter;
     self.pinCodeLabel.backgroundColor = [UIColor clearColor];
     self.pinCodeLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:42.0f];
     self.pinCodeLabel.text = @"";
