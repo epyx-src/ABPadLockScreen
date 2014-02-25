@@ -74,8 +74,8 @@ typedef enum
 
 @property (nonatomic, unsafe_unretained) id<ABPadLockScreenDelegate> delegate;
 @property (nonatomic, unsafe_unretained) id<ABPadLockScreenDataSource> dataSource;
-@property (nonatomic, readonly) PinMode pinMode;
-@property (nonatomic, readonly) PinState pinState;
+@property (nonatomic) PinMode pinMode;
+@property (nonatomic) PinState pinState;
 @property (nonatomic, assign) BOOL showCancelButton;
 
 - (id)initWithMode:(PinMode)pinMode
