@@ -51,9 +51,6 @@
 @property (nonatomic, strong) NSString *digitThree;
 @property (nonatomic, strong) NSString *digitFour;
 
-@property (nonatomic) PinMode pinMode;
-@property (nonatomic) PinState pinState;
-
 @end
 
 @implementation ABPadLockScreen
@@ -263,6 +260,16 @@
                                      rightButtonWidth, 
                                      buttonHeight)];
     [self.view addSubview:clearButton];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    [self resetLockScreen];
+
+    [self.titleLabel setText:[self.dataSource pinPadLockScreenTitleTextForMode:self.pinMode state:self.pinState]];
+    [self.subTitleLabel setText:[self.dataSource pinPadLockScreenSubtitleTextForMode:self.pinMode state:self.pinState]];
 }
 
 - (void)viewDidUnload
